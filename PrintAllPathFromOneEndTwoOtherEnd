@@ -1,0 +1,96 @@
+import java.lang.module.FindException;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+class Graph{
+    Map<String,List<String>> map=new LinkedHashMap<String, List<String>>();
+	public void addVertex(String s) {
+		List<String> arr=new ArrayList<>();
+      		map.putIfAbsent(s,arr);
+	}
+	public void addEdege(String s1,String s2)
+	{
+		map.get(s1).add(s2);
+	}
+	public List<String> getList(String string)
+	{
+		return map.get(string);
+	}
+	public int indexOfkey(String s)
+	{
+		List keys = new ArrayList(map.keySet());
+		int index = keys.indexOf(s);
+		return index;
+	}
+	
+}
+
+public class TotalPath {
+	public static int findAllPath(String s1,String s2,int count)
+	{
+	     if(s1.equals(s2))
+	    	 count++;
+	     else
+	     {
+	    	for(String str:gp.getList(s1))
+	    	{
+	    		count=findAllPath(str, s2, count);
+	    	}
+	     }
+	     return count;
+	}
+	static Graph gp=new Graph();
+	public static void printAllPath(String s1,String s2,int num)
+	{
+		boolean visited[]=new boolean[num];
+		ArrayList<String> arrayList=new ArrayList<>();
+		arrayList.add(s1);
+		printAllPathFromGraph(s1,s2,visited,arrayList);
+	}
+	public static void printAllPathFromGraph(String s1,String s2,boolean visited[],ArrayList<String> arraylist) {
+		if(s1.equals(s2))
+		{
+			System.out.println(arraylist);
+			return;
+		}
+		visited[gp.indexOfkey(s1)]=true;
+			for(String str:gp.getList(s1))
+			{
+				if(!visited[gp.indexOfkey(str)])
+				{
+					arraylist.add(str);
+					printAllPathFromGraph(str, s2, visited, arraylist);
+					arraylist.remove(str);
+				}
+			}
+			visited[gp.indexOfkey(s1)]=false;
+		
+	}
+public static void main(String args[])
+{
+	 int count=0;
+	Scanner scan=new Scanner(System.in);
+	gp.addVertex("A");
+	gp.addVertex("B");
+	gp.addVertex("C");
+	gp.addVertex("D");
+	gp.addVertex("E");
+	gp.addVertex("F");
+	gp.addEdege("A", "E");
+	gp.addEdege("A", "C");
+	gp.addEdege("C", "E");
+	gp.addEdege("C", "D");
+	gp.addEdege("D", "E");
+	gp.addEdege("A", "F");
+	gp.addEdege("F", "E");
+	int num=gp.map.size();
+	int countpath=findAllPath("A","E",count);
+	printAllPath("A","E",num);
+	System.out.println(countpath);
+	//List<String> list1=gp.getList("A");
+	//System.out.println(list1);
+	
+}
+}
